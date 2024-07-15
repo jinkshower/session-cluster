@@ -19,7 +19,7 @@ public class JdbcTemplateMemberDAO implements MemberDAO {
 		rs.getString("password"),
 		rs.getString("name")
 	);
-	private static final String TABLE_NAME = "members";
+	private static final String TABLE_NAME = "member";
 	private static final String KEY_COLUMN_NAME = "id";
 
 	private final JdbcTemplate jdbcTemplate;
@@ -48,6 +48,7 @@ public class JdbcTemplateMemberDAO implements MemberDAO {
 
 	@Override
 	public Optional<Member> findByEmail(final String email) {
-		return null;
+		String sql = "SELECT id, email, password, name FROM member WHERE email = ?";
+		return Optional.of(jdbcTemplate.queryForObject(sql, MEMBER_ROW_MAPPER, email));
 	}
 }
