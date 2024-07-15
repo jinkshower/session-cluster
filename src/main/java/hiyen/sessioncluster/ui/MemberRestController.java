@@ -6,8 +6,13 @@ import hiyen.sessioncluster.domain.Member;
 import hiyen.sessioncluster.ui.dto.request.MemberCreateRequest;
 import hiyen.sessioncluster.ui.dto.request.MemberLoginRequest;
 import hiyen.sessioncluster.ui.dto.response.MemberResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.net.URI;
+import java.util.Arrays;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,10 +44,28 @@ public class MemberRestController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<Member> login(@RequestBody final MemberLoginRequest request) {
-		//TODO implement login
-		memberLoginService.login(request);
+	public ResponseEntity<Void> login(@RequestBody final MemberLoginRequest request, final
+		HttpServletResponse response) {
+		String sessionId = memberLoginService.login(request);
 
-		return null;
+		Cookie cookie = new Cookie("sessionId", sessionId);
+		cookie.setHttpOnly(true);
+		cookie.setPath("/");
+		response.addCookie(cookie);
+
+		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping
+	public ResponseEntity<String> check(final HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+		String sessionId = Arrays.stream(cookies)
+			.filter(cookie -> "sessionId".equals(cookie.getName()))
+			.findFirst()
+			.map(Cookie::getValue)
+			.orElseThrow();
+		String check = memberLoginService.check(sessionId);
+
+		return ResponseEntity.ok().body(check);
 	}
 }
