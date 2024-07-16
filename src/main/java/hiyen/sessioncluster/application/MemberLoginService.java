@@ -24,26 +24,15 @@ public class MemberLoginService {
 	}
 
 	@Transactional
-	public String login(final MemberLoginRequest request) {
+	public Member login(final MemberLoginRequest request) {
 		Member member = findByEmail(request.email());
 		if (!member.getPassword().equals(request.password())) {
 			throw new MemberException.FailLoginException();
 		}
 
 		log.info("login success. Member email : {}", member.getEmail());
-		String sessionId = sessionManager.establish(member);
-		return sessionId;
+		return member;
 	}
-
-//	public String check(final String sessionId) {
-//		if (!sessionManager.isExist(sessionId)) {
-//			throw new IllegalArgumentException("세션이 존재하지 않습니다.");
-//		}
-//
-//		Member member = sessionManager.getMember(sessionId);
-//		return member.getName();
-//	}
-
 
 	private Member findByEmail(final String email) {
 		return memberDAO.findByEmail(email)

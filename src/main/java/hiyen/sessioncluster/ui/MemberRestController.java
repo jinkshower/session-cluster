@@ -25,13 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberRestController {
 	private final MemberService memberService;
 	private final MemberLoginService memberLoginService;
+	private final SessionManager sessionManager;
 
 	public MemberRestController(
 		final MemberService memberService,
-		final MemberLoginService memberLoginService
+		final MemberLoginService memberLoginService,
+		final SessionManager sessionManager
 	) {
 		this.memberService = memberService;
 		this.memberLoginService = memberLoginService;
+		this.sessionManager = sessionManager;
 	}
 
 	@PostMapping("/register")
@@ -48,9 +51,12 @@ public class MemberRestController {
 	@PostMapping("/login")
 	public ResponseEntity<Void> login(@RequestBody final MemberLoginRequest request, final
 		HttpServletResponse response) {
-		String sessionId = memberLoginService.login(request);
 
-		Cookie cookie = new Cookie(SessionManager.SESSION_KEY, sessionId);
+		final Member logined = memberLoginService.login(request);
+
+		final String sessionId = sessionManager.establish(logined);
+
+		final Cookie cookie = new Cookie(SessionManager.SESSION_KEY, sessionId);
 		cookie.setHttpOnly(true);
 		cookie.setPath("/");
 		response.addCookie(cookie);
