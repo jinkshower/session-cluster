@@ -1,16 +1,17 @@
 package hiyen.sessioncluster.member.ui;
 
+import hiyen.sessioncluster.global.auth.AuthMember;
+import hiyen.sessioncluster.global.auth.session.SessionManager;
 import hiyen.sessioncluster.member.application.MemberLoginService;
 import hiyen.sessioncluster.member.application.MemberService;
 import hiyen.sessioncluster.member.domain.Member;
-import hiyen.sessioncluster.global.auth.AuthMember;
-import hiyen.sessioncluster.global.auth.session.SessionManager;
 import hiyen.sessioncluster.member.ui.dto.request.MemberCreateRequest;
 import hiyen.sessioncluster.member.ui.dto.request.MemberLoginRequest;
 import hiyen.sessioncluster.member.ui.dto.response.MemberResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import java.net.URI;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,20 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/members")
+@RequiredArgsConstructor
 public class MemberRestController {
+
 	private final MemberService memberService;
 	private final MemberLoginService memberLoginService;
 	private final SessionManager sessionManager;
-
-	public MemberRestController(
-		final MemberService memberService,
-		final MemberLoginService memberLoginService,
-		final SessionManager sessionManager
-	) {
-		this.memberService = memberService;
-		this.memberLoginService = memberLoginService;
-		this.sessionManager = sessionManager;
-	}
 
 	@PostMapping("/register")
 	public ResponseEntity<MemberResponse> save(@RequestBody final MemberCreateRequest request) {
@@ -48,7 +41,7 @@ public class MemberRestController {
 
 	@PostMapping("/login")
 	public ResponseEntity<Void> login(@RequestBody final MemberLoginRequest request, final
-		HttpServletResponse response) {
+	HttpServletResponse response) {
 
 		final Member logined = memberLoginService.login(request);
 

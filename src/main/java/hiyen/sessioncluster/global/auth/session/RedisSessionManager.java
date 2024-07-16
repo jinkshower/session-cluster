@@ -1,31 +1,26 @@
 package hiyen.sessioncluster.global.auth.session;
 
-import hiyen.sessioncluster.member.domain.Member;
 import hiyen.sessioncluster.global.auth.AuthException;
+import hiyen.sessioncluster.member.domain.Member;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class RedisSessionManager implements SessionManager {
+
 	private final RedisTemplate<String, Object> redisTemplate;
 	private final SessionIdGenerator sessionIdGenerator;
-
-	public RedisSessionManager(
-		final RedisTemplate<String, Object> redisTemplate,
-		final SessionIdGenerator sessionIdGenerator
-	) {
-		this.redisTemplate = redisTemplate;
-		this.sessionIdGenerator = sessionIdGenerator;
-	}
 
 	@Override
 	public String establish(final Member member) {
 
-		String sessionId = sessionIdGenerator.generate();
+		final String sessionId = sessionIdGenerator.generate();
 		redisTemplate.opsForValue().set(sessionId, member, 60, TimeUnit.SECONDS);
 
 		return sessionId;
@@ -47,7 +42,7 @@ public class RedisSessionManager implements SessionManager {
 
 	@Override
 	public String extractSessionId(final HttpServletRequest request) {
-		Cookie[] cookies = request.getCookies();
+		final Cookie[] cookies = request.getCookies();
 
 		if (cookies == null) {
 			throw new AuthException.FailAuthenticationMemberException();

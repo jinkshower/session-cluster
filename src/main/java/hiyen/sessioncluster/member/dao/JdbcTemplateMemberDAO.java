@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class JdbcTemplateMemberDAO implements MemberDAO {
+
 	private static final RowMapper<Member> MEMBER_ROW_MAPPER = (rs, rowNum)
 		-> new Member(
 		rs.getLong("id"),

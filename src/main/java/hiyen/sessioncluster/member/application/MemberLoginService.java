@@ -3,30 +3,23 @@ package hiyen.sessioncluster.member.application;
 import hiyen.sessioncluster.member.dao.MemberDAO;
 import hiyen.sessioncluster.member.domain.Member;
 import hiyen.sessioncluster.member.exception.MemberException;
-import hiyen.sessioncluster.global.auth.session.SessionManager;
 import hiyen.sessioncluster.member.exception.MemberException.FailLoginException;
 import hiyen.sessioncluster.member.ui.dto.request.MemberLoginRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class MemberLoginService {
-	private final MemberDAO memberDAO;
-	private final SessionManager sessionManager;
 
-	public MemberLoginService(
-		final MemberDAO memberDAO,
-		final SessionManager sessionManager
-	) {
-		this.memberDAO = memberDAO;
-		this.sessionManager = sessionManager;
-	}
+	private final MemberDAO memberDAO;
 
 	@Transactional
 	public Member login(final MemberLoginRequest request) {
-		Member member = findByEmail(request.email());
+		final Member member = findByEmail(request.email());
 		if (!member.getPassword().equals(request.password())) {
 			throw new FailLoginException();
 		}

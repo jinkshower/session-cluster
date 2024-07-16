@@ -1,7 +1,7 @@
 package hiyen.sessioncluster.global.exception;
 
-import hiyen.sessioncluster.member.exception.MemberException;
 import hiyen.sessioncluster.global.auth.AuthException;
+import hiyen.sessioncluster.member.exception.MemberException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,8 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(value = {
 		MemberException.FailLoginException.class
 	})
-	public ResponseEntity<ErrorResponse> handleBadRequestException(final RuntimeException exception) {
+	public ResponseEntity<ErrorResponse> handleBadRequestException(
+		final RuntimeException exception) {
 		String message = exception.getMessage();
 		log.warn("BadRequestException: {}", message, exception);
 
