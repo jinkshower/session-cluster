@@ -1,6 +1,7 @@
 package hiyen.sessioncluster.global.auth.session;
 
 import hiyen.sessioncluster.domain.Member;
+import hiyen.sessioncluster.global.auth.AuthException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -40,7 +41,7 @@ public class RedisSessionManager implements SessionManager {
 		try {
 			return (Member) redisTemplate.opsForValue().get(sessionId);
 		} catch (Exception e) {
-			throw new IllegalArgumentException("세션이 존재하지 않습니다.");
+			throw new AuthException.FailAuthenticationMemberException();
 		}
 	}
 
@@ -49,7 +50,7 @@ public class RedisSessionManager implements SessionManager {
 		Cookie[] cookies = request.getCookies();
 
 		if (cookies == null) {
-			throw new IllegalArgumentException("쿠키가 존재하지 않습니다.");
+			throw new AuthException.FailAuthenticationMemberException();
 		}
 
 		return Arrays.stream(cookies)

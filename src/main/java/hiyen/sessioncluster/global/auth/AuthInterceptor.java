@@ -20,7 +20,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 		String sessionId = sessionManager.extractSessionId(request);
 
 		if (!sessionManager.isExist(sessionId)) {
-			throw new IllegalArgumentException("세션이 존재하지 않습니다.");
+			throw new AuthException.FailAuthenticationMemberException();
 		}
 
 		return true;

@@ -2,11 +2,14 @@ package hiyen.sessioncluster.application;
 
 import hiyen.sessioncluster.dao.MemberDAO;
 import hiyen.sessioncluster.domain.Member;
+import hiyen.sessioncluster.exception.MemberException;
 import hiyen.sessioncluster.global.auth.session.SessionManager;
 import hiyen.sessioncluster.ui.dto.request.MemberLoginRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 public class MemberLoginService {
 	private final MemberDAO memberDAO;
@@ -24,25 +27,26 @@ public class MemberLoginService {
 	public String login(final MemberLoginRequest request) {
 		Member member = findByEmail(request.email());
 		if (!member.getPassword().equals(request.password())) {
-			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+			throw new MemberException.FailLoginException();
 		}
 
+		log.info("login success. Member email : {}", member.getEmail());
 		String sessionId = sessionManager.establish(member);
 		return sessionId;
 	}
 
-	public String check(final String sessionId) {
-		if (!sessionManager.isExist(sessionId)) {
-			throw new IllegalArgumentException("세션이 존재하지 않습니다.");
-		}
-
-		Member member = sessionManager.getMember(sessionId);
-		return member.getName();
-	}
+//	public String check(final String sessionId) {
+//		if (!sessionManager.isExist(sessionId)) {
+//			throw new IllegalArgumentException("세션이 존재하지 않습니다.");
+//		}
+//
+//		Member member = sessionManager.getMember(sessionId);
+//		return member.getName();
+//	}
 
 
 	private Member findByEmail(final String email) {
 		return memberDAO.findByEmail(email)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+			.orElseThrow(MemberException.NotFoundMemberException::new);
 	}
 }
