@@ -1,6 +1,6 @@
-package hiyen.sessioncluster.dao;
+package hiyen.sessioncluster.member.dao;
 
-import hiyen.sessioncluster.domain.Member;
+import hiyen.sessioncluster.member.domain.Member;
 import java.util.Optional;
 
 public interface MemberDAO {

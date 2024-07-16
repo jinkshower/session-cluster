@@ -1,8 +1,8 @@
-package hiyen.sessioncluster.application;
+package hiyen.sessioncluster.member.application;
 
-import hiyen.sessioncluster.dao.MemberDAO;
-import hiyen.sessioncluster.domain.Member;
-import hiyen.sessioncluster.ui.dto.request.MemberCreateRequest;
+import hiyen.sessioncluster.member.dao.MemberDAO;
+import hiyen.sessioncluster.member.domain.Member;
+import hiyen.sessioncluster.member.ui.dto.request.MemberCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

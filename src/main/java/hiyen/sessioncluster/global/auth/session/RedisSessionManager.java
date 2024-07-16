@@ -1,6 +1,6 @@
 package hiyen.sessioncluster.global.auth.session;
 
-import hiyen.sessioncluster.domain.Member;
+import hiyen.sessioncluster.member.domain.Member;
 import hiyen.sessioncluster.global.auth.AuthException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,6 +1,6 @@
 package hiyen.sessioncluster.global.exception;
 
-import hiyen.sessioncluster.exception.MemberException;
+import hiyen.sessioncluster.member.exception.MemberException;
 import hiyen.sessioncluster.global.auth.AuthException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

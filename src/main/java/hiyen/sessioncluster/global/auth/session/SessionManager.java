@@ -1,6 +1,6 @@
 package hiyen.sessioncluster.global.auth.session;
 
-import hiyen.sessioncluster.domain.Member;
+import hiyen.sessioncluster.member.domain.Member;
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface SessionManager {

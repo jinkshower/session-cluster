@@ -1,4 +1,4 @@
-package hiyen.sessioncluster.domain;
+package hiyen.sessioncluster.member.domain;
 
 public class Member {
 	private Long id;

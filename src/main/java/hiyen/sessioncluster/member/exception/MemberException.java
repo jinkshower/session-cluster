@@ -1,4 +1,4 @@
-package hiyen.sessioncluster.exception;
+package hiyen.sessioncluster.member.exception;
 
 public class MemberException extends RuntimeException {
 

@@ -1,18 +1,16 @@
-package hiyen.sessioncluster.ui;
+package hiyen.sessioncluster.member.ui;
 
-import hiyen.sessioncluster.application.MemberLoginService;
-import hiyen.sessioncluster.application.MemberService;
-import hiyen.sessioncluster.domain.Member;
+import hiyen.sessioncluster.member.application.MemberLoginService;
+import hiyen.sessioncluster.member.application.MemberService;
+import hiyen.sessioncluster.member.domain.Member;
 import hiyen.sessioncluster.global.auth.AuthMember;
 import hiyen.sessioncluster.global.auth.session.SessionManager;
-import hiyen.sessioncluster.ui.dto.request.MemberCreateRequest;
-import hiyen.sessioncluster.ui.dto.request.MemberLoginRequest;
-import hiyen.sessioncluster.ui.dto.response.MemberResponse;
+import hiyen.sessioncluster.member.ui.dto.request.MemberCreateRequest;
+import hiyen.sessioncluster.member.ui.dto.request.MemberLoginRequest;
+import hiyen.sessioncluster.member.ui.dto.response.MemberResponse;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.net.URI;
-import java.util.Arrays;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

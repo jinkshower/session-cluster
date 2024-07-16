@@ -1,4 +1,4 @@
-package hiyen.sessioncluster.ui.dto.request;
+package hiyen.sessioncluster.member.ui.dto.request;
 
 public record MemberLoginRequest(
 	String email,
