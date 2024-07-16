@@ -3,6 +3,7 @@ package hiyen.sessioncluster.ui;
 import hiyen.sessioncluster.application.MemberLoginService;
 import hiyen.sessioncluster.application.MemberService;
 import hiyen.sessioncluster.domain.Member;
+import hiyen.sessioncluster.global.auth.AuthMember;
 import hiyen.sessioncluster.ui.dto.request.MemberCreateRequest;
 import hiyen.sessioncluster.ui.dto.request.MemberLoginRequest;
 import hiyen.sessioncluster.ui.dto.response.MemberResponse;
@@ -32,7 +33,7 @@ public class MemberRestController {
 		this.memberLoginService = memberLoginService;
 	}
 
-	@PostMapping
+	@PostMapping("/register")
 	public ResponseEntity<MemberResponse> save(@RequestBody final MemberCreateRequest request) {
 
 		final Member created = memberService.save(request);
@@ -56,16 +57,8 @@ public class MemberRestController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping
-	public ResponseEntity<String> check(final HttpServletRequest request) {
-		Cookie[] cookies = request.getCookies();
-		String sessionId = Arrays.stream(cookies)
-			.filter(cookie -> "sessionId".equals(cookie.getName()))
-			.findFirst()
-			.map(Cookie::getValue)
-			.orElseThrow();
-		String check = memberLoginService.check(sessionId);
-
-		return ResponseEntity.ok().body(check);
+	@GetMapping("/check")
+	public ResponseEntity<String> check(@AuthMember Member member) {
+		return ResponseEntity.ok().body(member.getName());
 	}
 }

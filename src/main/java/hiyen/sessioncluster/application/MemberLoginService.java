@@ -2,6 +2,7 @@ package hiyen.sessioncluster.application;
 
 import hiyen.sessioncluster.dao.MemberDAO;
 import hiyen.sessioncluster.domain.Member;
+import hiyen.sessioncluster.global.auth.session.SessionManager;
 import hiyen.sessioncluster.ui.dto.request.MemberLoginRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
