@@ -1,4 +1,4 @@
-package hiyen.sessioncluster.application;
+package hiyen.sessioncluster.global.auth.session;
 
 import java.util.UUID;
 import org.springframework.stereotype.Component;

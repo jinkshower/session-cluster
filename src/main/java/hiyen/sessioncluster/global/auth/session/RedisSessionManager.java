@@ -1,4 +1,4 @@
-package hiyen.sessioncluster.application;
+package hiyen.sessioncluster.global.auth.session;
 
 import hiyen.sessioncluster.domain.Member;
 import java.util.concurrent.TimeUnit;
