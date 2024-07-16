@@ -3,7 +3,6 @@ package hiyen.sessioncluster.member.application;
 import hiyen.sessioncluster.member.dao.MemberDAO;
 import hiyen.sessioncluster.member.domain.Member;
 import hiyen.sessioncluster.member.exception.MemberException;
-import hiyen.sessioncluster.member.exception.MemberException.FailLoginException;
 import hiyen.sessioncluster.member.ui.dto.request.MemberLoginRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +20,7 @@ public class MemberLoginService {
 	public Member login(final MemberLoginRequest request) {
 		final Member member = findByEmail(request.email());
 		if (!member.getPassword().equals(request.password())) {
-			throw new FailLoginException();
+			throw new MemberException.FailLoginException();
 		}
 
 		log.info("login success. Member email : {}", member.getEmail());
