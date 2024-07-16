@@ -1,5 +1,6 @@
 package hiyen.sessioncluster.member.application;
 
+import hiyen.sessioncluster.global.auth.password.PasswordEncoder;
 import hiyen.sessioncluster.member.dao.MemberDAO;
 import hiyen.sessioncluster.member.domain.Member;
 import hiyen.sessioncluster.member.exception.MemberException;
@@ -15,11 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberLoginService {
 
 	private final MemberDAO memberDAO;
+	private final PasswordEncoder passwordEncoder;
 
 	@Transactional
 	public Member login(final MemberLoginRequest request) {
 		final Member member = findByEmail(request.email());
-		if (!member.getPassword().equals(request.password())) {
+		if (!passwordEncoder.matches(request.password(), member.getPassword())){
 			throw new MemberException.FailLoginException();
 		}
 
