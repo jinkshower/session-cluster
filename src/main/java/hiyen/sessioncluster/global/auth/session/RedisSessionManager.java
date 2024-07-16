@@ -1,6 +1,9 @@
 package hiyen.sessioncluster.global.auth.session;
 
 import hiyen.sessioncluster.domain.Member;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -22,7 +25,7 @@ public class RedisSessionManager implements SessionManager {
 	public String establish(final Member member) {
 
 		String sessionId = sessionIdGenerator.generate();
-		redisTemplate.opsForValue().set(sessionId, member, 60, TimeUnit.MINUTES);
+		redisTemplate.opsForValue().set(sessionId, member, 60, TimeUnit.SECONDS);
 
 		return sessionId;
 	}
@@ -34,6 +37,25 @@ public class RedisSessionManager implements SessionManager {
 
 	@Override
 	public Member getMember(final String sessionId) {
-		return (Member) redisTemplate.opsForValue().get(sessionId);
+		try {
+			return (Member) redisTemplate.opsForValue().get(sessionId);
+		} catch (Exception e) {
+			throw new IllegalArgumentException("세션이 존재하지 않습니다.");
+		}
+	}
+
+	@Override
+	public String extractSessionId(final HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+
+		if (cookies == null) {
+			throw new IllegalArgumentException("쿠키가 존재하지 않습니다.");
+		}
+
+		return Arrays.stream(cookies)
+			.filter(cookie -> cookie.getName().equals("sessionId"))
+			.findFirst()
+			.map(Cookie::getValue)
+			.orElseThrow();
 	}
 }
