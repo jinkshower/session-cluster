@@ -4,6 +4,7 @@ import hiyen.sessioncluster.application.MemberLoginService;
 import hiyen.sessioncluster.application.MemberService;
 import hiyen.sessioncluster.domain.Member;
 import hiyen.sessioncluster.global.auth.AuthMember;
+import hiyen.sessioncluster.global.auth.session.SessionManager;
 import hiyen.sessioncluster.ui.dto.request.MemberCreateRequest;
 import hiyen.sessioncluster.ui.dto.request.MemberLoginRequest;
 import hiyen.sessioncluster.ui.dto.response.MemberResponse;
@@ -49,7 +50,7 @@ public class MemberRestController {
 		HttpServletResponse response) {
 		String sessionId = memberLoginService.login(request);
 
-		Cookie cookie = new Cookie("sessionId", sessionId);
+		Cookie cookie = new Cookie(SessionManager.SESSION_KEY, sessionId);
 		cookie.setHttpOnly(true);
 		cookie.setPath("/");
 		response.addCookie(cookie);

@@ -53,7 +53,7 @@ public class RedisSessionManager implements SessionManager {
 		}
 
 		return Arrays.stream(cookies)
-			.filter(cookie -> cookie.getName().equals("sessionId"))
+			.filter(cookie -> cookie.getName().equals(SESSION_KEY))
 			.findFirst()
 			.map(Cookie::getValue)
 			.orElseThrow();
