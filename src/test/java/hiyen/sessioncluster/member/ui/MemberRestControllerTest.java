@@ -111,6 +111,54 @@ class MemberRestControllerTest extends AcceptanceTest {
 		}
 	}
 
+	@Nested
+	@DisplayName("세션 체크")
+	class Session {
+
+		final String email = "example@example.com";
+		final String password = "Password1";
+		final String name = "jinkshower";
+
+		@BeforeEach
+		void setUp() {
+			final MemberCreateRequest request = new MemberCreateRequest(email, password, name);
+			register(request);
+		}
+
+		@Test
+		@DisplayName("성공")
+		void success() {
+			// given
+			final MemberLoginRequest request = new MemberLoginRequest(email, password);
+			ExtractableResponse<Response> loginResponse = login(request);
+
+			// when
+			ExtractableResponse<Response> response = check(loginResponse.cookie("JSESSIONID"));
+
+			// then
+			assertThat(response.statusCode()).isEqualTo(200);
+		}
+
+		@Test
+		@DisplayName("세션 키가 없다면 실패한다")
+		void fail() {
+			// when
+			ExtractableResponse<Response> response = check("wrongSessionKey");
+
+			// then
+			assertThat(response.statusCode()).isEqualTo(401);
+		}
+	}
+
+	private ExtractableResponse<Response> register(final MemberCreateRequest request) {
+		return RestAssured.given().log().all()
+			.body(request)
+			.contentType("application/json")
+			.when().post("/api/members/register")
+			.then().log().all()
+			.extract();
+	}
+
 	private ExtractableResponse<Response> login(final MemberLoginRequest request) {
 		return RestAssured.given().log().all()
 				.body(request)
@@ -120,11 +168,10 @@ class MemberRestControllerTest extends AcceptanceTest {
 				.extract();
 	}
 
-	private ExtractableResponse<Response> register(final MemberCreateRequest request) {
+	private ExtractableResponse<Response> check(final String sessionKey) {
 		return RestAssured.given().log().all()
-				.body(request)
-				.contentType("application/json")
-				.when().post("/api/members/register")
+				.cookie("JSESSIONID", sessionKey)
+				.when().get("/api/members/check")
 				.then().log().all()
 				.extract();
 	}
