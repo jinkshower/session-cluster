@@ -6,6 +6,7 @@ import hiyen.sessioncluster.member.domain.Member;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -15,12 +16,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class RedisSessionManager implements SessionManager {
 	private final RedisTemplate<String, Object> redisTemplate;
-	private final SessionIdGenerator sessionIdGenerator;
 
 	@Override
 	public String establish(final Member member) {
 
-		final String sessionId = sessionIdGenerator.generate();
+		final String sessionId = UUID.randomUUID().toString();
 		redisTemplate.opsForValue().set(sessionId, member.getEmail(), 60, TimeUnit.SECONDS);
 
 		return sessionId;
