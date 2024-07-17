@@ -36,7 +36,7 @@ public class RedisSessionManager implements SessionManager {
 		try {
 			return (Member) redisTemplate.opsForValue().get(sessionId);
 		} catch (Exception e) {
-			throw new AuthException.FailAuthenticationMemberException();
+			throw new AuthException.FailAuthenticationMemberException(e);
 		}
 	}
 
