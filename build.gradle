@@ -28,6 +28,8 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     implementation 'org.mindrot:jbcrypt:0.4'
+
+    testImplementation 'io.rest-assured:rest-assured'
 }
 
 tasks.named('test') {
