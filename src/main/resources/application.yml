@@ -1,24 +1,20 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:tcp://localhost:9092/./testdb
     driver-class-name: org.h2.Driver
     username: sa
-    password: password
+    password:
   h2:
     console:
       enabled: true
   data:
     redis:
-      host: localhost
+      host: redis
       port: 6379
   sql:
     init:
       schema-locations: classpath:initialize_table.sql
-  jpa:
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+      mode: always
 
 logging:
   level:
