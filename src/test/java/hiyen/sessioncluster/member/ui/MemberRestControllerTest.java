@@ -84,5 +84,4 @@ class MemberRestControllerTest extends AcceptanceTest {
 				.then().log().all()
 				.extract();
 	}
-
 }
