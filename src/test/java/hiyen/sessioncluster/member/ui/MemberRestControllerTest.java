@@ -12,6 +12,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class MemberRestControllerTest extends AcceptanceTest {
 
@@ -20,11 +22,11 @@ class MemberRestControllerTest extends AcceptanceTest {
 	class Register {
 
 		final String email = "example@example.com";
-		final String password = "password1!";
+		final String password = "Password1";
 		final String name = "jinkshower";
 
 		@Test
-		@DisplayName("성공한다.")
+		@DisplayName("성공")
 		void success() {
 			// given
 			MemberCreateRequest request = new MemberCreateRequest(email, password, name);
@@ -36,6 +38,48 @@ class MemberRestControllerTest extends AcceptanceTest {
 			assertThat(response.statusCode()).isEqualTo(201);
 			assertThat(response.header("Location")).contains("/api/members/");
 		}
+
+		@ParameterizedTest
+		@DisplayName("비정상 이메일로 가입시 실패한다.")
+		@ValueSource(strings = {"", "s", "tignibimmg", "eifi@eianf", "example@.com", "example@com", "example@com."})
+		void fail_wrongEmail(final String wrongEmail) {
+			// given
+			final MemberCreateRequest request = new MemberCreateRequest(wrongEmail, password, name);
+
+			// when
+			final ExtractableResponse<Response> response = register(request);
+
+			// then
+			assertThat(response.statusCode()).isEqualTo(400);
+		}
+
+		@ParameterizedTest
+		@DisplayName("4자 이상 소문자, 대문자, 숫자 조합이 아닌 비밀번호로 가입시 실패한다.")
+		@ValueSource(strings = {"", "p2P", "PASSWORD", "password!", "PASSWORD1", "password1", "PASSWORD1!"})
+		void fail_wrongPassword(final String wrongPassword) {
+			// given
+			final MemberCreateRequest request = new MemberCreateRequest(email, wrongPassword, name);
+
+			// when
+			final ExtractableResponse<Response> response = register(request);
+
+			// then
+			assertThat(response.statusCode()).isEqualTo(400);
+		}
+
+		@ParameterizedTest
+		@DisplayName("2자 이상 10자 이하가 아닌 이름으로 가입시 실패한다.")
+		@ValueSource(strings = {"", "s", "tignibimmg1"})
+		void fail_wrongName(final String wrongName) {
+			// given
+			final MemberCreateRequest request = new MemberCreateRequest(email, password, wrongName);
+
+			// when
+			final ExtractableResponse<Response> response = register(request);
+
+			// then
+			assertThat(response.statusCode()).isEqualTo(400);
+		}
 	}
 
 	@Nested
@@ -43,7 +87,7 @@ class MemberRestControllerTest extends AcceptanceTest {
 	class Login {
 
 		final String email = "example@example.com";
-		final String password = "password1!";
+		final String password = "Password1";
 		final String name = "jinkshower";
 
 		@BeforeEach
@@ -53,7 +97,7 @@ class MemberRestControllerTest extends AcceptanceTest {
 		}
 
 		@Test
-		@DisplayName("성공한다.")
+		@DisplayName("성공")
 		void success() {
 			// given
 			final MemberLoginRequest request = new MemberLoginRequest(email, password);

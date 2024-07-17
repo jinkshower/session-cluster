@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +31,7 @@ public class MemberRestController {
 	private final SessionManager sessionManager;
 
 	@PostMapping("/register")
-	public ResponseEntity<MemberResponse> register(@RequestBody final MemberCreateRequest request) {
+	public ResponseEntity<MemberResponse> register(@RequestBody @Validated final MemberCreateRequest request) {
 
 		final Member created = memberService.register(request);
 		final MemberResponse response = new MemberResponse(created.getName());
