@@ -30,6 +30,6 @@ public class AuthMemberArgumentResolver implements HandlerMethodArgumentResolver
 		final HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 
 		final String sessionId = sessionManager.extractSessionId(request);
-		return sessionManager.getMember(sessionId);
+		return sessionManager.getAuthEmail(sessionId);
 	}
 }

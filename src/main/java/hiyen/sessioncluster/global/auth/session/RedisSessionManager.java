@@ -1,6 +1,7 @@
 package hiyen.sessioncluster.global.auth.session;
 
 import hiyen.sessioncluster.global.auth.AuthException;
+import hiyen.sessioncluster.global.auth.AuthEmail;
 import hiyen.sessioncluster.member.domain.Member;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class RedisSessionManager implements SessionManager {
-
 	private final RedisTemplate<String, Object> redisTemplate;
 	private final SessionIdGenerator sessionIdGenerator;
 
@@ -21,7 +21,7 @@ public class RedisSessionManager implements SessionManager {
 	public String establish(final Member member) {
 
 		final String sessionId = sessionIdGenerator.generate();
-		redisTemplate.opsForValue().set(sessionId, member, 60, TimeUnit.SECONDS);
+		redisTemplate.opsForValue().set(sessionId, member.getEmail(), 60, TimeUnit.SECONDS);
 
 		return sessionId;
 	}
@@ -32,9 +32,10 @@ public class RedisSessionManager implements SessionManager {
 	}
 
 	@Override
-	public Member getMember(final String sessionId) {
+	public AuthEmail getAuthEmail(final String sessionId) {
 		try {
-			return (Member) redisTemplate.opsForValue().get(sessionId);
+			String authEmail = (String) redisTemplate.opsForValue().get(sessionId);
+			return new AuthEmail(authEmail);
 		} catch (Exception e) {
 			throw new AuthException.FailAuthenticationMemberException(e);
 		}
@@ -42,6 +43,7 @@ public class RedisSessionManager implements SessionManager {
 
 	@Override
 	public String extractSessionId(final HttpServletRequest request) {
+
 		final Cookie[] cookies = request.getCookies();
 
 		if (cookies == null) {

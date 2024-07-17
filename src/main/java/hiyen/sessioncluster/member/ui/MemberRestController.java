@@ -1,5 +1,6 @@
 package hiyen.sessioncluster.member.ui;
 
+import hiyen.sessioncluster.global.auth.AuthEmail;
 import hiyen.sessioncluster.global.auth.AuthMember;
 import hiyen.sessioncluster.global.auth.session.SessionManager;
 import hiyen.sessioncluster.member.application.MemberLoginService;
@@ -29,9 +30,9 @@ public class MemberRestController {
 	private final SessionManager sessionManager;
 
 	@PostMapping("/register")
-	public ResponseEntity<MemberResponse> save(@RequestBody final MemberCreateRequest request) {
+	public ResponseEntity<MemberResponse> register(@RequestBody final MemberCreateRequest request) {
 
-		final Member created = memberService.save(request);
+		final Member created = memberService.register(request);
 		final MemberResponse response = new MemberResponse(created.getName());
 		final URI uri = URI.create("/api/members" + created.getId());
 
@@ -56,7 +57,12 @@ public class MemberRestController {
 	}
 
 	@GetMapping("/check")
-	public ResponseEntity<String> check(@AuthMember Member member) {
-		return ResponseEntity.ok().body(member.getName());
+	public ResponseEntity<MemberResponse> check(@AuthMember AuthEmail authEmail) {
+
+		final Member found = memberService.check(authEmail.email());
+		final MemberResponse response = new MemberResponse(found.getName());
+
+		return ResponseEntity.ok()
+			.body(response);
 	}
 }

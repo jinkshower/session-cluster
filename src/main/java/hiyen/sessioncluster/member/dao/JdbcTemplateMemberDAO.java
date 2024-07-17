@@ -39,17 +39,27 @@ public class JdbcTemplateMemberDAO implements MemberDAO {
 		SqlParameterSource params = new BeanPropertySqlParameterSource(member);
 		Number key = jdbcInsert.executeAndReturnKey(params);
 
-		return member;
+		return new Member(
+			key.longValue(),
+			member.getEmail(),
+			member.getPassword(),
+			member.getName()
+		);
 	}
 
 	@Override
 	public Optional<Member> findById(final Long id) {
-		return null;
+
+		String sql = "SELECT id, email, password, name FROM member WHERE id = ?";
+
+		return Optional.of(jdbcTemplate.queryForObject(sql, MEMBER_ROW_MAPPER, id));
 	}
 
 	@Override
 	public Optional<Member> findByEmail(final String email) {
+
 		String sql = "SELECT id, email, password, name FROM member WHERE email = ?";
+
 		return Optional.of(jdbcTemplate.queryForObject(sql, MEMBER_ROW_MAPPER, email));
 	}
 }
