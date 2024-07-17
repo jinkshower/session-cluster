@@ -34,7 +34,7 @@ public class MemberRestController {
 
 		final Member created = memberService.register(request);
 		final MemberResponse response = new MemberResponse(created.getName());
-		final URI uri = URI.create("/api/members" + created.getId());
+		final URI uri = URI.create("/api/members/" + created.getId());
 
 		return ResponseEntity.created(uri)
 			.body(response);
