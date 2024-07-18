@@ -56,4 +56,9 @@ public class RedisSessionManager implements SessionManager {
 			.map(Cookie::getValue)
 			.orElseThrow();
 	}
+
+	@Override
+	public void invalidate(final String sessionId) {
+		redisTemplate.delete(sessionId);
+	}
 }

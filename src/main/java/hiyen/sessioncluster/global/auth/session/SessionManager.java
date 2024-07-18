@@ -14,4 +14,6 @@ public interface SessionManager {
 	AuthEmail getAuthEmail(String sessionId);
 
 	String extractSessionId(HttpServletRequest request);
+
+	void invalidate(String sessionId);
 }
