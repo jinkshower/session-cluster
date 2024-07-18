@@ -15,7 +15,6 @@ public class MemberService {
 	private final MemberDAO memberDAO;
 	private final PasswordEncoder passwordEncoder;
 
-	@Transactional
 	public Member register(final MemberCreateRequest request) {
 
 		final Member member = new Member(

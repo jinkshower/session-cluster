@@ -18,7 +18,7 @@ public class MemberLoginService {
 	private final MemberDAO memberDAO;
 	private final PasswordEncoder passwordEncoder;
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public Member login(final MemberLoginRequest request) {
 		final Member member = findByEmail(request.email());
 		if (!passwordEncoder.matches(request.password(), member.getPassword())){
