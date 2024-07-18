@@ -5,7 +5,7 @@ import hiyen.sessioncluster.member.domain.Member;
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface SessionManager {
-	String SESSION_KEY = "JSESSIONID";
+	String SESSION_KEY = "Authorization";
 
 	String establish(Member member);
 

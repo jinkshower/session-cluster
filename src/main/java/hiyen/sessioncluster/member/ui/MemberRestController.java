@@ -51,10 +51,7 @@ public class MemberRestController {
 
 		final String sessionId = sessionManager.establish(logined);
 
-		final Cookie cookie = new Cookie(SessionManager.SESSION_KEY, sessionId);
-		cookie.setHttpOnly(true);
-		cookie.setPath("/");
-		response.addCookie(cookie);
+		response.setHeader(SessionManager.SESSION_KEY, sessionId);
 
 		return ResponseEntity.ok()
 			.body(new AuthResponse(logined.getEmail(), sessionId));
@@ -72,16 +69,10 @@ public class MemberRestController {
 
 	@PostMapping("/logout")
 	public ResponseEntity<AuthResponse> logout(@AuthMember AuthEmail authEmail,
-		final HttpServletRequest request, final HttpServletResponse response) {
+		final HttpServletRequest request) {
 
 		final String sessionId = sessionManager.extractSessionId(request);
 		sessionManager.invalidate(sessionId);
-
-		final Cookie cookie = new Cookie(SessionManager.SESSION_KEY, null);
-		cookie.setHttpOnly(true);
-		cookie.setPath("/");
-		cookie.setMaxAge(0);
-		response.addCookie(cookie);
 
 		return ResponseEntity.ok()
 			.body(new AuthResponse(authEmail.email(), sessionId));

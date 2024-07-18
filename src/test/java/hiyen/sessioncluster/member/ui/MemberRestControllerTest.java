@@ -103,11 +103,11 @@ class MemberRestControllerTest extends AcceptanceTest {
 			final MemberLoginRequest request = new MemberLoginRequest(email, password);
 
 			// when
-			ExtractableResponse<Response> login = login(request);
+			ExtractableResponse<Response> response = login(request);
 
 			// then
-			assertThat(login.statusCode()).isEqualTo(200);
-			assertThat(login.cookie("JSESSIONID")).isNotNull();
+			assertThat(response.statusCode()).isEqualTo(200);
+			assertThat(response.header("Authorization")).isNotNull();
 		}
 	}
 
@@ -133,7 +133,7 @@ class MemberRestControllerTest extends AcceptanceTest {
 			ExtractableResponse<Response> loginResponse = login(request);
 
 			// when
-			ExtractableResponse<Response> response = check(loginResponse.cookie("JSESSIONID"));
+			ExtractableResponse<Response> response = check(loginResponse.header("Authorization"));
 
 			// then
 			assertThat(response.statusCode()).isEqualTo(200);
@@ -170,7 +170,7 @@ class MemberRestControllerTest extends AcceptanceTest {
 
 	private ExtractableResponse<Response> check(final String sessionKey) {
 		return RestAssured.given().log().all()
-				.cookie("JSESSIONID", sessionKey)
+				.header("Authorization", sessionKey)
 				.when().get("/api/members/check")
 				.then().log().all()
 				.extract();

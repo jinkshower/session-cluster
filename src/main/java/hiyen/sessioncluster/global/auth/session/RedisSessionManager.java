@@ -44,17 +44,13 @@ public class RedisSessionManager implements SessionManager {
 	@Override
 	public String extractSessionId(final HttpServletRequest request) {
 
-		final Cookie[] cookies = request.getCookies();
+		final String sessionHeader = request.getHeader(SESSION_KEY);
 
-		if (cookies == null) {
+		if (sessionHeader == null) {
 			throw new AuthException.FailAuthenticationMemberException();
 		}
 
-		return Arrays.stream(cookies)
-			.filter(cookie -> cookie.getName().equals(SESSION_KEY))
-			.findFirst()
-			.map(Cookie::getValue)
-			.orElseThrow();
+		return sessionHeader;
 	}
 
 	@Override
