@@ -34,6 +34,8 @@ public class EmbeddedRedisConfig {
 			redisServer = RedisServer.builder()
 				.port(port)
 				.setting("maxmemory 128M")
+				.setting("save \"\"")
+				.setting("appendonly no")
 				.build();
 		}
 
