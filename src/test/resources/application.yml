@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    active: test
+  h2:
+    console:
+      enabled: true
+  sql:
+    init:
+      schema-locations: classpath:initialize_table.sql
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  data:
+    redis:
+      host: localhost
+      port: 1111
+
+logging:
+  level:
+    org.hibernate.type.descriptor.sql:
+      BasicBinder: TRACE
+    org.springframework: DEBUG
