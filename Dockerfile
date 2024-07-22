@@ -1,9 +1,7 @@
 FROM openjdk:17
 
-WORKDIR /jinkshower
-
 ARG JAR_FILE=/build/libs/*.jar
 
-COPY ${JAR_FILE} /jinkshower/jinkshower.jar
+COPY ${JAR_FILE} /app.jar
 
-ENTRYPOINT ["java","-Dspring.profiles.active=container", "-jar", "jinkshower.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
