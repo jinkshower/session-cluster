@@ -53,6 +53,7 @@ public class SessionClusteringTest {
 
 		// 인스턴스 1에 체크 요청
 		ExtractableResponse<Response> check1 = check(8080);
+		// 인스턴스 2에 체크 요청
 		ExtractableResponse<Response> check2 = check(8081);
 
 		// 세션 ID가 동일한지 확인
