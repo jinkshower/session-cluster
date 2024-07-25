@@ -78,6 +78,33 @@ Bcrypt는 솔트, 키스트레칭이 적용된 검증된 암호화 시스템이�
 동일한 메세지에 솔트를 추가하여 다른 결과값을 가지게 하여 123456에도 다른 해시 결과를 가지게 하므로 레인보우 테이블 공격을 어렵게 한다.
 해시함수를 여러번 적용하여 연산에 걸리는 시간을 의도적으로 늘려 브루트 포스 공격을 어렵게 한다.
 
+---
+
+- 테스트, 배포 자동화에 Github Actions를 사용한 이유
+
+Github Actions를 사용해 본 경험이 있어서 익숙하다.
+Jenkins는 레퍼런스가 많고 다양한 플러그인을 지원하지만 그만큼 설정이 어렵다.
+무엇보다 별개의 서버가 따로 필요한데 Jenkins만을 위한 서버를 띄우기 돈, 시간이 부담스럽다.
+
+- 현재 인프라 환경의 문제점은?
+
+단일 서버(Naver Cloud Platform 무료 Micro 서버)내에 Redis, WAS, Nginx, DB가 모두 설치되어 있어 서버가 다운되면 모든 서비스가 중단된다.
+세션 클러스터링을 하는 이유는 서버의 scale-out을 대비하기 위함인데 현재 상황에서는 scale-out이 불가능하다.
+프로젝트의 의도대로 무상태인 WAS계층을 만들려면 Nginx, Redis, DB 서버를 따로 두고 WAS를 여러대 띄울 수 있어야 한다.
+
+- nginx를 사용한 이유는?
+
+웹 서비스의 표준포트는 80, 443이다.
+WAS를 80 or 443으로 사용하면 이후 서버가 확장될 때 충돌이 발생할 수 있다.
+WAS를 비표준포트로 두고 Nginx를 활용하여 무중단 배포, 로드밸런싱, HTTPS 적용을 할 수 있는 확장성을 열었다.
+
+- 웹서버면 apache도 있는데 왜 nginx를 사용했나?
+
+apache는 요청 기반 멀티프로세스 + 멀티스레드 모델을 사용한다.
+쓰레드풀을 운영하고 요청이 많아지면 프로세스를 fork한다. 이는 메모리 사용량을 예측할 수 없게 한다. 작은 서버에서는 치명적이다.
+nginx는 멀티프로세스지만 요청당 스레드를 할당하는 방식이 아니다. 
+Master process가 여러개의 Worker Process를 관리하며 Worker Process는 싱글 스레드, 이벤트 기반으로 통신을 비동기 처리한다.
+따라서 메모리 사용량이 적고, 예측 가능하여 작은 서버에 제격이라 사용했다.
 
 ### how to run
 
@@ -93,7 +120,6 @@ docker-compose up -d
 
 docker-compose create two server instances whose ports are 8080, 8081.   
 You can test the server by sending request to 8080, 8081.
-
 
 ### Project Structure
 
