@@ -36,3 +36,6 @@ out/
 
 ### VS Code ###
 .vscode/
+/src/main/resources/binary-redis/dump.rdb
+/src/main/resources/application-prod.yml
+docker-compose-ncp.yml

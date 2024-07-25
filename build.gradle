@@ -49,12 +49,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.projectlombok:lombok'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
 
     annotationProcessor 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    runtimeOnly 'com.mysql:mysql-connector-j'
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
@@ -64,6 +66,8 @@ dependencies {
 
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    //테스트를 위한 embeddedRedis추가
+    implementation 'it.ozimov:embedded-redis:0.7.2'
 }
 
 tasks.named('test') {
